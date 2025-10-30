@@ -158,4 +158,6 @@ router.get("/logout", (req, res) => {
   });
 });
 
+router.use((req, res) => res.status(404).send("404 - Page not found"));
+
 export default router;
