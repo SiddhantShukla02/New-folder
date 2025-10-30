@@ -1,31 +1,59 @@
-// routes/hospitalRoutes.js
 import express from "express";
 import Hospital from "../models/hospitals.js";
 
 const router = express.Router();
 
-// GET /hospitals  -> list all hospitals
-router.get("/", async (req, res) => {
+
+router.post("/", async (req, res) => {
   try {
-    // populate doctors so the list view can show number of doctors (if needed)
-    const hospitals = await Hospital.find().populate("doctors", "name specialization");
-    res.render("hospitals", { hospitals });
+    const { name, address, city, state, description, contact } = req.body;
+
+    const newHospital = new Hospital({
+      name,
+      address,
+      city,
+      state,
+      description,
+      contact,
+    });
+
+    const savedHospital = await newHospital.save();
+
+    res.status(201).json({
+      message: "✅ Hospital added successfully",
+      hospital: savedHospital,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Server Error");
+    console.error("Error adding hospital:", err);
+    res.status(500).json({ error: "Server error while adding hospital" });
   }
 });
 
-// GET /hospitals/:id  -> show details for one hospital (including doctors)
+
+router.get("/", async (req, res) => {
+  try {
+    const hospitals = await Hospital.find().populate("doctors", "name specialization");
+    return res.status(200).json(hospitals);
+  } catch (err) {
+    console.error("Error fetching hospitals:", err);
+    return res.status(500).json({ error: "Server error while fetching hospitals" });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
-    const hospital = await Hospital.findById(req.params.id).populate("doctors");
-    if (!hospital) return res.status(404).send("Hospital not found");
-    // send hospital (which includes hospital.doctors)
-    res.render("hospital_details", { hospital });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server Error");
+    const { id } = req.params;
+
+    const hospital = await Hospital.findById(id).populate("doctors", "name specialization");
+
+    if (!hospital) {
+      return res.status(404).json({ message: "Hospital not found" });
+    }
+
+    res.status(200).json(hospital);
+  } catch (error) {
+    console.error("Error fetching hospital by ID:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

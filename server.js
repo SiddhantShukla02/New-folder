@@ -1,10 +1,12 @@
-// server.js
+
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import session from "express-session";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+import cors from "cors";
+
 
 import hospitalRoutes from "./routes/hospitalRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
@@ -17,47 +19,55 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Body parsing
+
+app.use(cors({
+  origin: "http://127.0.0.1:5500", 
+  credentials: true 
+}));
+
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Static assets
 app.use(express.static(path.join(__dirname, "public")));
 
-// View engine
-app.set("view engine", "ejs");
+
 app.set("views", path.join(__dirname, "views"));
 
-// Session (used by admin auth middleware)
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "dev-secret",
+    secret: process.env.SESSION_SECRET || "default-secret-key",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false, //true for https
+      sameSite: "lax", 
+      maxAge: 1000 * 60 * 60, 
+    },
   })
 );
 
-// Connect DB (config/db.js)
-await (async () => {
+(async () => {
   try {
     await connectDB();
+    
   } catch (err) {
-    console.error("DB connect failed in server.js:", err);
+    console.error("❌ Database connection failed:", err);
     process.exit(1);
   }
 })();
 
-// Mount routers at base paths for clarity
 app.use("/hospitals", hospitalRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/admin", adminRoutes);
 
-// Home page (index view)
 app.get("/", (req, res) => {
-  res.render("index");
+  res.json({ message: "Welcome to the Hospital Management API" });
 });
 
 const PORT = process.env.PORT || 3000;
-import mongoose from "mongoose";
-console.log("Connected DB:", mongoose.connection.name);
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`✅ Server running at: http://localhost:${PORT}`);
+});

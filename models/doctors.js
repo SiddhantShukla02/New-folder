@@ -1,12 +1,34 @@
 import mongoose from "mongoose";
 
 const doctorSchema = new mongoose.Schema({
-  name: String,
-  speciality: String,
-  experience: String,
-  hospital: { type: mongoose.Schema.Types.ObjectId, ref: "Hospital" },
-  phone: String,
-  email: String,
+  name: {
+    type: String,
+    required: true,       
+    trim: true,           
+  },
+
+  specializations: {
+    type: [String],
+    required: true,
+    trim: true,
+  },
+
+  experience: {
+    type: Number,
+    default: 0,           
+  },
+
+  hospital: {
+    type: mongoose.Schema.Types.ObjectId,   
+    ref: "Hospital",                        
+    required: true,                         
+  },
+  image: {
+    type: String,
+    default: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",                
+  },
 });
 
-export default mongoose.model("Doctor", doctorSchema);
+const Doctor = mongoose.model("Doctor", doctorSchema);
+
+export default Doctor;

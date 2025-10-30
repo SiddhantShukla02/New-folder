@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hospital Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f9fafb;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .hospital-container {
+      margin-top: 60px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    .hospital-img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      height: 300px;
+    }
+
+    .hospital-info {
+      padding: 1rem;
+    }
+
+    .doctor-link {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      background-color: #007bff;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+
+    .doctor-link:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="index.html">HealthConnect</a>
+      <div>
+        <a href="hospitals.html" class="btn btn-light btn-sm">Hospitals</a>
+        <a href="doctors.html" class="btn btn-light btn-sm">Doctors</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="hospital-details" class="hospital-container row align-items-center">
+      <!-- Hospital details will be inserted here -->
+    </div>
+  </div>
+
+  <script>
+    async function fetchHospitalDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const hospitalId = urlParams.get("id");
+
+      if (!hospitalId) {
+        document.getElementById("hospital-details").innerHTML =
+          `<p class="text-center text-danger">Invalid hospital ID.</p>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(`http://localhost:3000/hospitals/${hospitalId}`);
+        const hospital = await res.json();
+
+        const imgSrc = hospital.image && hospital.image.trim() !== ""
+          ? hospital.image
+          : "https://cdn-icons-png.flaticon.com/512/2967/2967350.png";
+
+        const doctorsList = hospital.doctors?.length
+          ? hospital.doctors.map(doc => 
+              `<a href="doctor-details.html?id=${doc._id}" class="doctor-link">${doc.name}</a>`
+            ).join("")
+          : "<span class='text-muted'>No doctors listed.</span>";
+
+        const hospitalHTML = `
+          <div class="col-md-5">
+            <img src="${imgSrc}" alt="${hospital.name}" class="hospital-img">
+          </div>
+          <div class="col-md-7 hospital-info">
+            <h3 class="fw-bold text-primary mb-3">${hospital.name}</h3>
+            <p><strong>Address:</strong> ${hospital.address || "Not available"}</p>
+            <p><strong>City:</strong> ${hospital.city || "N/A"}, ${hospital.state || ""}</p>
+            <p><strong>Contact:</strong> ${hospital.contact || "Not provided"}</p>
+            <p><strong>About:</strong><br>${hospital.description || "No description available."}</p>
+            <hr>
+            <h5 class="fw-semibold mt-3">Doctors at this Hospital:</h5>
+            <div>${doctorsList}</div>
+          </div>
+        `;
+
+        document.getElementById("hospital-details").innerHTML = hospitalHTML;
+
+      } catch (err) {
+        console.error("Error fetching hospital:", err);
+        document.getElementById("hospital-details").innerHTML =
+          "<p class='text-center text-danger'>Failed to load hospital details.</p>";
+      }
+    }
+
+    fetchHospitalDetails();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

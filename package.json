@@ -2,7 +2,7 @@
   "name": "website",
   "version": "1.0.0",
   "main": "server.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -15,11 +15,17 @@
   "description": "",
   "dependencies": {
     "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.2"
+  },
+  "devDependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "nodemon": "^3.1.10"
   }
 }
