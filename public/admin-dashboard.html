@@ -82,7 +82,7 @@
       document.getElementById("logoutBtn").addEventListener("click", async () => {
         const res = await fetch("https://health-portal-8c9n.onrender.com/admin/logout", { credentials: "include" });
         if (res.ok) {
-          window.location.replace("/admin/login");
+          window.location.replace("/admin-login.html");
         }
       });
     </script>
@@ -129,7 +129,7 @@
       const res = await fetch("https://health-portal-8c9n.onrender.com/admin/check-session", { credentials: "include" });
       const data = await res.json();
       if (!data.loggedIn) {
-        window.location.replace("/admin/login");
+        window.location.replace("/admin-login.html");
       }
     }
 
@@ -216,7 +216,7 @@
       const response = await fetch("https://health-portal-8c9n.onrender.com/admin/check-session", { credentials: "include" });
       const data = await response.json();
       if (!data.loggedIn) {
-        window.location.href = "/admin/login";
+        window.location.href = "https://health-portal-8c9n.onrender.com/admin-login";
       }
     });
 

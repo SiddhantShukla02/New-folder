@@ -79,7 +79,10 @@
     </form>
   </div>
 
+
 <script>
+const backendURL = "https://health-portal-8c9n.onrender.com";
+
   // --- Clear fields on load and check login state ---
   window.addEventListener("load", async () => {
     const usernameInput = document.getElementById("username");
@@ -89,10 +92,10 @@
 
     // Check if already logged in
     try {
-      const res = await fetch("https://health-portal-8c9n.onrender.com/admin/check-session", { credentials: "include" });
+      const res = await fetch(`${backendURL}/admin/check-session`, { credentials: "include" });
       const data = await res.json();
       if (data.loggedIn) {
-        window.location.replace("/admin-dashboard.html");
+        window.location.replace(`${backendURL}/admin-dashboard.html`);
       }
     } catch (err) {
       console.warn("Session check failed:", err);
@@ -115,7 +118,7 @@
     const password = passwordInput.value.trim();
 
     try {
-      const res = await fetch("https://health-portal-8c9n.onrender.com/admin/login", {
+      const res = await fetch(`${backendURL}/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -127,7 +130,7 @@
       if (res.ok) {
         // ✅ Login successful
         localStorage.setItem("adminUser", data.admin);
-        window.location.replace("/admin-dashboard.html");
+        window.location.replace(`${backendURL}/admin-dashboard.html`);
       } else {
         // ❌ Invalid credentials
         showError(data.error || "Invalid credentials. Try again.");
