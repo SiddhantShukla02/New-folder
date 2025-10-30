@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Hospitals</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f9fafb;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .hospital-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .hospital-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .hospital-img {
+      height: 220px;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .card-body {
+      padding: 1rem 1.2rem;
+    }
+
+    .badge {
+      background-color: #007bff;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="index.html">HealthConnect</a>
+      <div>
+        <a href="doctors.html" class="btn btn-light btn-sm">Doctors</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h2 class="text-center mb-4 fw-bold text-primary">Our Partner Hospitals</h2>
+    <div id="hospitals-container" class="row g-4 justify-content-center">
+      <!-- Hospital cards will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <script>
+    async function fetchHospitals() {
+      try {
+        const res = await fetch("https://health-portal-8c9n.onrender.com/hospitals");
+        const hospitals = await res.json();
+
+        const container = document.getElementById("hospitals-container");
+        container.innerHTML = "";
+
+        hospitals.forEach(hosp => {
+          const imgSrc = hosp.image && hosp.image.trim() !== ""
+            ? hosp.image
+            : "https://cdn-icons-png.flaticon.com/512/2967/2967350.png"; // default hospital image
+
+          const card = `
+            <div class="col-md-4 col-sm-6">
+              <div class="card hospital-card shadow-sm" data-id="${hosp._id}">
+                <img src="${imgSrc}" alt="${hosp.name}" class="hospital-img">
+                <div class="card-body">
+                  <h5 class="card-title mb-2">${hosp.name}</h5>
+                  <p><strong>City:</strong> ${hosp.city || "N/A"}</p>
+                  <p><strong>State:</strong> ${hosp.state || "N/A"}</p>
+                  <p><strong>Contact:</strong> ${hosp.contact || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+          `;
+
+          container.insertAdjacentHTML("beforeend", card);
+        });
+
+        // Add click listeners to each card
+        document.querySelectorAll(".hospital-card").forEach(card => {
+          card.addEventListener("click", () => {
+            const hospitalId = card.getAttribute("data-id");
+            window.location.href = `hospital-details.html?id=${hospitalId}`;
+          });
+        });
+
+      } catch (err) {
+        console.error("Error fetching hospitals:", err);
+        document.getElementById("hospitals-container").innerHTML =
+          "<p class='text-center text-danger'>Failed to load hospitals.</p>";
+      }
+    }
+
+    fetchHospitals();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
