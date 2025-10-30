@@ -58,4 +58,6 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+import mongoose from "mongoose";
+console.log("Connected DB:", mongoose.connection.name);
 app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));

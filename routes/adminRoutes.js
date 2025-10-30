@@ -53,6 +53,7 @@ router.get("/dashboard", isAuth, async (req, res) => {
 // POST /admin/hospitals  (from admin form)
 router.post("/hospitals", isAuth, async (req, res) => {
   try {
+    console.log("Received hospital form data:", req.body);
     const { name, location, description, city, contact } = req.body;
     const h = await Hospital.create({ name, location, description, city, contact });
     res.redirect("/admin/dashboard");
