@@ -95,7 +95,8 @@ const backendURL = "https://health-portal-8c9n.onrender.com";
       const res = await fetch(`${backendURL}/admin/check-session`, { credentials: "include" });
       const data = await res.json();
       if (data.loggedIn) {
-        window.location.replace(`${backendURL}/admin-dashboard.html`);
+        // window.location.replace(`${backendURL}/admin-dashboard.html`);
+        window.location.replace(`/admin-dashboard.html`);
       }
     } catch (err) {
       console.warn("Session check failed:", err);
@@ -130,7 +131,9 @@ const backendURL = "https://health-portal-8c9n.onrender.com";
       if (res.ok) {
         // ✅ Login successful
         localStorage.setItem("adminUser", data.admin);
-        window.location.replace(`${backendURL}/admin-dashboard.html`);
+        // window.location.replace(`*${backendURL}/admin-dashboard.html`);
+        window.location.replace(`/admin-dashboard.html`);
+
       } else {
         // ❌ Invalid credentials
         showError(data.error || "Invalid credentials. Try again.");
