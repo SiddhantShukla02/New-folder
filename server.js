@@ -42,7 +42,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, //true for https
+      secure: true, //true for https
       sameSite: "lax", 
       maxAge: 1000 * 60 * 60, 
     },
