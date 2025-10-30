@@ -26,8 +26,7 @@ router.get("/login", (req, res) => {
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  // For demo: check hard-coded values OR check the Admin collection
-  // If you created an Admin doc, uncomment the DB check below.
+
   if (username === process.env.ADMIN_USER || username === "admin") {
     if (password === process.env.ADMIN_PASS || password === "1234") {
       req.session.admin = username;
@@ -35,9 +34,6 @@ router.post("/login", async (req, res) => {
     }
   }
 
-  // Optional DB-based auth:
-  // const admin = await Admin.findOne({ username });
-  // if (admin && admin.password === password) { ... }
 
   res.render("admin_login", { error: "Invalid credentials" });
 });
@@ -72,7 +68,7 @@ router.post("/doctors", isAuth, async (req, res) => {
     const { name, specialization, experience, hospital } = req.body; // note: 'hospital' is hospital id from form
     const d = await Doctor.create({ name, specialization, experience, hospital });
 
-    // Also add doctor id to that hospital document's doctors array
+    
     if (hospital) {
       await Hospital.findByIdAndUpdate(hospital, { $push: { doctors: d._id } });
     }
