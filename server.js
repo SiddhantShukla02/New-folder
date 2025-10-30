@@ -21,7 +21,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: "https://testing-health-portal.netlify.app/", 
+  origin: "https://testing-health-portal.netlify.app", 
   credentials: true 
 }));
 
