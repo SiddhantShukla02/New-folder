@@ -1,59 +1,56 @@
-const express = require('express');
+import express from "express";
+import Admin from "../models/admin.js";
+import Doctor from "../models/doctors.js";
+import Hospital from "../models/hospitals.js";
+
 const router = express.Router();
-const Hospital = require('../models/hospitals');
-const Doctor = require('../models/doctors');
 
-//Get Admin Dashboard
-router.get('/', async (req, res) => {
-    try {
-        const hospitals = await Hospital.find();
-        const doctors = await Doctor.find().populate('hospitals');
-        res.render('adminDashboard', { hospitals, doctors });
-    } catch (error) {
-        res.status(500).send('Server Error');
-    }
+const isAuth = (req, res, next) => {
+  if (req.session.admin) return next();
+  res.redirect("/admin/login");
+};
+
+
+//admin login
+router.get("/login", (req, res) => res.render("admin_login"));
+
+
+
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const admin = await Admin.findOne({ username, password });
+  if (admin) {
+    req.session.admin = admin;
+    res.redirect("/admin");
+  } else {
+    res.send("Invalid credentials");
+  }
 });
 
-//POST add a new hospital
-router.post('/add-hospital', async (req, res) => {
-    try {
-    const { name, location, description, specialties, phone, email, imageurl } = req.body;
-    const newHospital = new Hospital({
-        name,
-        location,
-        description,
-        specialties: specialties ? specialties.split(',').map(s => s.trim()) : [],
-        phone,
-        email,
-        imageurl
-    });
-    await newHospital.save();
-    console.log(`Hospital added : ${newHospital.name}`);
-    res.redirect('/admin');
-    } catch (error) {
-        res.status(500).send('Server Error');
-    }   
+router.get("/admin/dashboard", isAuth, async (req, res) => {
+  const hospitals = await Hospital.find();
+  const doctors = await Doctor.find().populate("hospital");
+  res.render("admin", { hospitals, doctors });
 });
 
-//POST add a new doctor
-router.post('/add-doctor', async (req, res) => {
-    try {
-    const { name, specialty, hospital, experience, phone, imageurl, email } = req.body;
-    const newDoctor = new Doctor({
-        name,
-        specialty,
-        hospital,
-        experience,
-        phone,
-        imageurl,
-        email
-    });
-    await newDoctor.save();
-    console.log(`Doctor added : ${newDoctor,name}`);
-    res.redirect('/admin');
-    } catch (error) {
-        res.status(500).send('Server Error');
-    }
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/admin/login");
 });
 
-module.exports = router;
+
+
+router.post("/add-hospital", isAuth, async (req, res) => {
+  const { name, location, description } = req.body;
+  await Hospital.create({ name, location, description });
+  res.redirect("/admin/dashboard");
+});
+
+router.post("/add-doctor", isAuth, async (req, res) => {
+  const { name, specialization, experience, hospitalId } = req.body;
+  const doctor = await Doctor.create({ name, specialization, experience, hospital: hospitalId });
+  await Hospital.findByIdAndUpdate(hospitalId, { $push: { doctors: doctor._id } });
+  res.redirect("/admin/dashboard");
+});
+
+export default router;

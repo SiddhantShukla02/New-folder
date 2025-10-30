@@ -1,18 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Hospitals</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospitals | Hospital Management Portal</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #0052cc;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .hospitals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .hospital-card {
+      background: #eef3ff;
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid #ccd9ff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hospital-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .hospital-card h3 {
+      color: #003399;
+      margin-bottom: 8px;
+    }
+
+    .hospital-card p {
+      font-size: 0.9rem;
+      color: #444;
+      margin: 5px 0;
+    }
+
+    .hospital-card a {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: #0052cc;
+      font-weight: 600;
+    }
+
+    .hospital-card a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #f0f0f0;
+      color: #777;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hospitals</h1>
-  <ul>
-    <% hospitals.forEach(h => { %>
-      <li>
-        <a href="/hospitals/<%= h._id %>"><%= h.name %></a> — <%= h.location %>
-      </li>
-    <% }) %>
-  </ul>
-  <a href="/admin">Go to Admin Dashboard</a>
+
+  <header>
+    <h1>Hospitals</h1>
+  </header>
+
+  <main>
+    <% if (hospitals && hospitals.length > 0) { %>
+      <div class="hospitals-grid">
+        <% hospitals.forEach(h => { %>
+          <div class="hospital-card">
+            <h3><%= h.name %></h3>
+            <p><strong>Location:</strong> <%= h.location %></p>
+            <% if (h.doctors && h.doctors.length > 0) { %>
+              <p><strong>Doctors:</strong> <%= h.doctors.length %></p>
+            <% } else { %>
+              <p><strong>Doctors:</strong> None listed</p>
+            <% } %>
+            <a href="/hospitals/<%= h._id %>">View Details →</a>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p style="text-align:center; color:#777;">No hospitals found.</p>
+    <% } %>
+  </main>
+
+  <footer>
+    <p>© 2025 Hospital Management Portal</p>
+  </footer>
+
 </body>
 </html>

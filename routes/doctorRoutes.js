@@ -1,9 +1,9 @@
-const express = require('express');
+import express from "express";
+import Doctor from "../models/doctors.js";
 const router = express.Router();
-const Doctor = require('../models/doctors');
 
 // Get all doctors
-router.get('/', async (req, res) => {
+router.get('/doctors', async (req, res) => {
     try {
         const doctors = await Doctor.find().populate('hospital');
         res.render('doctors', { doctors });
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get doctor details
-router.get('/:id', async (req, res) => {
+router.get('/doctors/:id', async (req, res) => {
     try {
         const doctor = await Doctor.findById(req.params.id).populate('hospital');
         res.render('doctorDetails', { doctor });
@@ -21,4 +21,5 @@ router.get('/:id', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
-module.exports = router;
+
+export default router;

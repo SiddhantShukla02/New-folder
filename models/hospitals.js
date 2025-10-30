@@ -1,15 +1,14 @@
-const mongoose = require('mongoose');
-const doctors = require('./doctors');
+import mongoose from "mongoose";
 
 const hospitalSchema = new mongoose.Schema({
-    name: String,
-    location: String,
-    description: String,
-    specialties : [String],
-    phone: String,
-    email: String,
-    imageurl: String,
-    doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Doctor' }]  
+  name: String,
+  address: String,
+  city: String,
+  contact: String,
+  website: String,
+  speciality: String,
+  doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Doctor" }]
 });
 
-module.exports = mongoose.model('Hospital', hospitalSchema);
+const Hospital = mongoose.model("Hospital", hospitalSchema);
+export default Hospital;
