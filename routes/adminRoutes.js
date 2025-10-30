@@ -1,6 +1,6 @@
 
 import express from "express";
-import Admin from "../models/Admin.js";
+import Admin from "../models/admin.js";
 import Hospital from "../models/hospitals.js";
 import Doctor from "../models/doctors.js";
 
