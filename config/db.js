@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, { dbName: "hospitalDB" });
-    console.log("✅ MongoDB Connected");
+    await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/hospitalDB");
+    console.log("✅ MongoDB connected successfully");
   } catch (err) {
-    console.error("❌ DB Connection Failed:", err.message);
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1);
   }
 };
 
