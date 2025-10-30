@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hospitals</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Hospitals</h1>
+  <ul>
+    <% hospitals.forEach(h => { %>
+      <li>
+        <a href="/hospitals/<%= h._id %>"><%= h.name %></a> — <%= h.location %>
+      </li>
+    <% }) %>
+  </ul>
+  <a href="/admin">Go to Admin Dashboard</a>
+</body>
+</html>

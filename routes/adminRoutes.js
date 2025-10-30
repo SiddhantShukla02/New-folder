@@ -28,6 +28,7 @@ router.post('/add-hospital', async (req, res) => {
         imageurl
     });
     await newHospital.save();
+    console.log(`Hospital added : ${newHospital.name}`);
     res.redirect('/admin');
     } catch (error) {
         res.status(500).send('Server Error');

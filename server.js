@@ -4,33 +4,33 @@ const path = require('path');
 const session = require('express-session');
 require('dotenv').config();
 
-// const bodyParser = require('body-parser');
-
-const hospitalRoutes = require('./routes/hospitals');
-const doctorRoutes = require('./routes/doctors');
-const adminRoutes = require('./routes/admin');
-const { error } = require('console');
-
 const app = express();
+
+
+// const { error } = require('console');
+
+
 const PORT = process.env.PORT || 3000;
 
 //middlewares
-app.set('view engine', 'ejs');
-
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(session({
     secret: process.env.SESSION_SECRET ||'your_secret_key',
     resave: false,
     saveUninitialized: true
 }));
-app.use(express.json());
+
 
 
 //DB
 const connectDB = async () => {
     try {
-        await mongoose.connect('mongodb://localhost:27017/hospitalDB');
+        await mongoose.connect(process.env.DB_URI);
         console.log('MongoDB connected');
     
     } catch (error) {
@@ -38,6 +38,15 @@ const connectDB = async () => {
         process.exit(1);
     }
 };
+
+//Routes
+const hospitalRoutes = require('./routes/hospitalRoutes');
+const doctorRoutes = require('./routes/doctorRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+
+app.use('/hospitals', hospitalRoutes);
+app.use('/doctors', doctorRoutes);
+app.use('/admin', requireLogin, adminRoutes);
 
 //Auth
 function requireLogin(req, res, next) {
@@ -49,32 +58,28 @@ function requireLogin(req, res, next) {
 }
 
 //Login Route
-app.get('/admin/login', (req, res) => {
-    res.render('login' ,{error: null});
+app.get('/login', (req, res) => {
+    res.render('admin-login' ,{error: null});
 });
 
-app.post('/admin/login', (req, res) => {
+app.post('/login', (req, res) => {
     const { username, password } = req.body;
     const ADMIN_USER = process.env.ADMIN_USER || 'admin';
     const ADMIN_PASS = process.env.ADMIN_PASS || 'password123';
     if(username === ADMIN_USER && password === ADMIN_PASS) {
         req.session.loggedIn = true;
-        res.redirect('/admin');
+        res.redirect('/admin.html');
     } else {
         res.render('login', { error: 'Invalid credentials' });
     }
 });
 //Logout Route
-app.get('/admin/logout', (req, res) => {
+app.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/admin/login');
+    res.redirect('/login.html');
 });
 
 
-//Routes
-app.use('/hospitals', hospitalRoutes);
-app.use('/doctors', doctorRoutes);
-app.use('/admin', requireLogin, adminRoutes);
 
 //start server
 const startServer = async () => {

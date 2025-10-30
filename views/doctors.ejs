@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Doctors</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Doctors</h1>
+  <ul>
+    <% doctors.forEach(doc => { %>
+      <li>
+        <a href="/doctors/<%= doc._id %>"><%= doc.name %></a> — 
+        <%= doc.specialization %> 
+        (<%= doc.hospital ? doc.hospital.name : 'No Hospital Assigned' %>)
+      </li>
+    <% }) %>
+  </ul>
+  <a href="/admin">Go to Admin Dashboard</a>
+</body>
+</html>
