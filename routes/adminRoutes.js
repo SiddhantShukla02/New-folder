@@ -23,8 +23,8 @@ function isAuthenticated(req, res, next) {
 }
 
 
-// One time Admin Registration Route
-router.post("/register", async (req, res) => {
+// One time Admin Registration Route, but made it secure so it needs login before adding new admin 
+router.post("/register", isAuthenticated, async (req, res) => {
   try {
     const { username, password } = req.body;
 
