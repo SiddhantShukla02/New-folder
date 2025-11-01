@@ -15,18 +15,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  try {
-    const doctor = await Doctor.findById(req.params.id).populate("hospital", "name city");
-    if (!doctor) {
-      return res.status(404).json({ message: "Doctor not found" });
-    }
-    res.status(200).json(doctor);
-  } catch (err) {
-    console.error("Error fetching doctor:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+// router.get("/:id", async (req, res) => {
+//   try {
+//     const doctor = await Doctor.findById(req.params.id).populate("hospital", "name city");
+//     if (!doctor) {
+//       return res.status(404).json({ message: "Doctor not found" });
+//     }
+//     res.status(200).json(doctor);
+//   } catch (err) {
+//     console.error("Error fetching doctor:", err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
 
 router.post("/", async (req, res) => {
   try {
