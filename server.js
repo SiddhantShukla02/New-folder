@@ -52,22 +52,14 @@ app.use(
   })
 );
 
-(async () => {
-  try {
-    await connectDB();
-    
-  } catch (err) {
-    console.error("❌ Database connection failed:", err);
-    process.exit(1);
-  }
-})();
+connectDB();
 
 app.use("/hospitals", hospitalRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the Hospital Management API" });
+  res.status(200).json({ message: "Welcome to the Hospital Management API" });
 });
 
 const PORT = process.env.PORT || 3000;

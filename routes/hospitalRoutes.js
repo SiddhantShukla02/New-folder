@@ -3,6 +3,15 @@ import Hospital from "../models/hospitals.js";
 
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+  try {
+    const hospitals = await Hospital.find().populate("doctors", "name specialization");
+    return res.status(200).json(hospitals);
+  } catch (err) {
+    console.error("Error fetching hospitals:", err);
+    return res.status(500).json({ error: "Server error while fetching hospitals" });
+  }
+});
 
 router.post("/", async (req, res) => {
   try {
@@ -30,15 +39,7 @@ router.post("/", async (req, res) => {
 });
 
 
-router.get("/", async (req, res) => {
-  try {
-    const hospitals = await Hospital.find().populate("doctors", "name specialization");
-    return res.status(200).json(hospitals);
-  } catch (err) {
-    console.error("Error fetching hospitals:", err);
-    return res.status(500).json({ error: "Server error while fetching hospitals" });
-  }
-});
+
 
 router.get("/:id", async (req, res) => {
   try {
