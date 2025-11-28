@@ -61,7 +61,7 @@
   <script>
     async function fetchDoctors() {
       try {
-        const res = await fetch("https://health-connect-theta-nine.vercel.app/api/doctors");
+        const res = await fetch("https://test-healthconnect.netlify.app/api/doctors");
         const doctors = await res.json();
 
         const container = document.getElementById("doctors-container");

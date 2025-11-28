@@ -21,7 +21,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: "https://health-connect-theta-nine.vercel.app",
+  origin: "https://test-healthconnect.netlify.app/",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
