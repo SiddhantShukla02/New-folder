@@ -78,7 +78,7 @@
       }
 
       try {
-        const res = await fetch(`https://health-portal-8c9n.onrender.com/hospitals/${hospitalId}`);
+        const res = await fetch(`https://health-portal-8c9n.onrender.com/api/hospitals/${hospitalId}`);
         const hospital = await res.json();
 
         const imgSrc = hospital.image && hospital.image.trim() !== ""

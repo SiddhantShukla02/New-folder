@@ -80,7 +80,7 @@
     <button id="logoutBtn">Logout</button>
     <script>
       document.getElementById("logoutBtn").addEventListener("click", async () => {
-        const res = await fetch("https://health-portal-8c9n.onrender.com/admin/logout", { credentials: "include" });
+        const res = await fetch("https://health-portal-8c9n.onrender.com/api/admin/logout", { credentials: "include" });
         if (res.ok) {
           window.location.replace("/admin-login.html");
         }
