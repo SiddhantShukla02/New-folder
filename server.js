@@ -21,7 +21,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: "https://test-healthconnect.netlify.app",
+  origin: "https://health-portal-8c9n.onrender.com",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]

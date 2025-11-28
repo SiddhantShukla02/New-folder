@@ -44,7 +44,7 @@ router.post("/register", isAuthenticated, async (req, res) => {
 
 
 router.get("/login", (req, res) => {
-  res.json({ message: "Send POST request to /admin/login with username and password" });
+  res.json({ message: "Send POST request to /api/admin/login with username and password" });
 });
 
 router.post("/login", async (req, res) => {
