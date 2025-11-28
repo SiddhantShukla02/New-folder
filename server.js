@@ -54,15 +54,15 @@ app.use(
 
 connectDB();
 
-app.use("/hospitals", hospitalRoutes);
-app.use("/doctors", doctorRoutes);
-app.use("/admin", adminRoutes);
+app.use("/api/hospitals", hospitalRoutes);
+app.use("/api/doctors", doctorRoutes);
+app.use("/api/admin", adminRoutes);
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.status(200).json({ message: "Welcome to the Hospital Management API" });
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running at: http://localhost:${PORT}`);
+  console.log(`✅ Server running at:`,process.env.BACKEND_URL || `http://localhost:${PORT}`);
 });

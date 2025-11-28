@@ -7,13 +7,15 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const doctors = await Doctor.find().populate("hospital", "name city");
+    const doctors = await Doctor.find().populate("hospital", "name city").lean();
     res.status(200).json(doctors);
   } catch (err) {
     console.error("Error fetching doctors:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
 
 // router.get("/:id", async (req, res) => {
 //   try {
@@ -56,11 +58,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",  async (req, res) => {
   try {
     const { id } = req.params;
 
-    const doctor = await Doctor.findById(id).populate("hospital", "name city state");
+    const doctor = await Doctor.findById(id).populate("hospital", "name city state").lean();
 
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" });
