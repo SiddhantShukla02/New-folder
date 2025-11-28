@@ -61,7 +61,7 @@
   <script>
     async function fetchDoctors() {
       try {
-        const res = await fetch("https://health-portal-8c9n.onrender.com/doctors");
+        const res = await fetch("https://health-connect-theta-nine.vercel.app/api/doctors");
         const doctors = await res.json();
 
         const container = document.getElementById("doctors-container");
