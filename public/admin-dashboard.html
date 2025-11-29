@@ -142,7 +142,7 @@
             description = hospDesc.value.trim(),
             contact = hospContact.value.trim();
 
-      const res = await fetch("https://health-portal-8c9n.onrender.com/admin/add-hospital", {
+      const res = await fetch("https://health-portal-8c9n.onrender.com/api/admin/add-hospital", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, address, city, state, description, contact }),
@@ -170,7 +170,7 @@
             experience = docExp.value.trim(),
             hospital = docHosp.value.trim();
 
-      const res = await fetch("https://health-portal-8c9n.onrender.com/admin/add-doctor", {
+      const res = await fetch("https://health-portal-8c9n.onrender.com/api/admin/add-doctor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, specializations, experience, hospital }),
@@ -191,7 +191,7 @@
 
     // --- Logout ---
     document.getElementById("logoutBtn").addEventListener("click", async () => {
-      await fetch("https://health-portal-8c9n.onrender.com/admin/logout", { credentials: "include" });
+      await fetch("https://health-portal-8c9n.onrender.com/api/admin/logout", { credentials: "include" });
       sessionStorage.clear();
       localStorage.clear();
       window.location.replace("/admin-login.html");
@@ -213,7 +213,7 @@
 
     // --- Session recheck on load ---
     window.addEventListener("load", async () => {
-      const response = await fetch("https://health-portal-8c9n.onrender.com/admin/check-session", { credentials: "include" });
+      const response = await fetch("https://health-portal-8c9n.onrender.com/api/admin/check-session", { credentials: "include" });
       const data = await response.json();
       if (!data.loggedIn) {
         window.location.href = "https://health-portal-8c9n.onrender.com/admin-login";
